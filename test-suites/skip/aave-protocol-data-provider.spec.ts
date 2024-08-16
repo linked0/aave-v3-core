@@ -1,12 +1,12 @@
 import hre from 'hardhat';
 import { expect } from 'chai';
 import { utils } from 'ethers';
-import { makeSuite, TestEnv } from './helpers/make-suite';
+import { makeSuite, TestEnv } from '../helpers/make-suite';
 import { getMockPool, ZERO_ADDRESS } from '@aave/deploy-v3';
-import { InitializableImmutableAdminUpgradeabilityProxy } from '../types';
-import { impersonateAccountsHardhat } from '../helpers/misc-utils';
-import { topUpNonPayableWithEther } from './helpers/utils/funds';
-import { getProxyImplementation } from '../helpers/contracts-helpers';
+import { InitializableImmutableAdminUpgradeabilityProxy } from '../../types';
+import { impersonateAccountsHardhat } from '../../helpers/misc-utils';
+import { topUpNonPayableWithEther } from '../helpers/utils/funds';
+import { getProxyImplementation } from '../../helpers/contracts-helpers';
 
 makeSuite('AaveProtocolDataProvider: Edge cases', (testEnv: TestEnv) => {
   const MKR_ADDRESS = '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2';

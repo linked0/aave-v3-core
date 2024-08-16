@@ -75,12 +75,12 @@ const almostEqualOrEqual = function (
 
       this.assert(
         actualValue.eq(expectedValue) ||
-          actualValue.add(1).eq(expectedValue) ||
-          actualValue.eq(expectedValue.add(1)) ||
-          actualValue.add(2).eq(expectedValue) ||
-          actualValue.eq(expectedValue.add(2)) ||
-          actualValue.add(3).eq(expectedValue) ||
-          actualValue.eq(expectedValue.add(3)),
+        actualValue.add(1).eq(expectedValue) ||
+        actualValue.eq(expectedValue.add(1)) ||
+        actualValue.add(2).eq(expectedValue) ||
+        actualValue.eq(expectedValue.add(2)) ||
+        actualValue.add(3).eq(expectedValue) ||
+        actualValue.eq(expectedValue.add(3)),
         `expected #{act} to be almost equal or equal #{exp} for property ${key}`,
         `expected #{act} to be almost equal or equal #{exp} for property ${key}`,
         expectedValue.toString(),
@@ -89,8 +89,8 @@ const almostEqualOrEqual = function (
     } else {
       this.assert(
         actual[key] !== null &&
-          expected[key] !== null &&
-          actual[key].toString() === expected[key].toString(),
+        expected[key] !== null &&
+        actual[key].toString() === expected[key].toString(),
         `expected #{act} to be equal #{exp} for property ${key}`,
         `expected #{act} to be equal #{exp} for property ${key}`,
         expected[key],
@@ -119,14 +119,15 @@ interface ActionsConfig {
 export const configuration: ActionsConfig = <ActionsConfig>{};
 
 export const mint = async (reserveSymbol: string, amount: string, user: SignerWithAddress) => {
+  console.log("Minting ", amount, " of ", reserveSymbol, " for ", user.address);
   const reserve = await getTestnetReserveAddressFromSymbol(reserveSymbol);
-
+  console.log('Reserve address: ', reserve);
   const token = await getMintableERC20(reserve);
-
+  console.log('Token address: ', token.address);
   await waitForTx(
     await token
       .connect(user.signer)
-      ['mint(address,uint256)'](user.address, await convertToCurrencyDecimals(reserve, amount))
+    ['mint(address,uint256)'](user.address, await convertToCurrencyDecimals(reserve, amount))
   );
 };
 
