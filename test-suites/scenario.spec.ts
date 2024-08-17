@@ -9,14 +9,14 @@ const scenarioFolder = './test-suites/helpers/scenarios/';
 
 // borrow-negatives.json, borrow-repay-stable.json
 // borrow-repayWithPermit-variable.json
-// set-use-as-collateral.json, withdraw-negatives.json
+// withdraw-negatives.json
 // borrow-repay-stable-edge.json, borrow-repay-variable.json
 // credit-delegation.json
 // rebalance-stable-rate.json, swap-rate-mode.json,
 
-// deposit.json withdraw
+// deposit.json withdraw set-use-as-collateral
 
-const selectedScenarios: string[] = ['deposit.json']; //"borrow-repay-stable-edge.json", "borrow-repay-stable.json"];
+const selectedScenarios: string[] = ['withdraw.json']; //"borrow-repay-stable-edge.json", "borrow-repay-stable.json"];
 
 fs.readdirSync(scenarioFolder).forEach((file) => {
   if (selectedScenarios.length > 0 && !selectedScenarios.includes(file)) return;

@@ -7,6 +7,7 @@ import {WadRayMath} from '../../libraries/math/WadRayMath.sol';
 import {IPool} from '../../../interfaces/IPool.sol';
 import {IScaledBalanceToken} from '../../../interfaces/IScaledBalanceToken.sol';
 import {MintableIncentivizedERC20} from './MintableIncentivizedERC20.sol';
+import 'hardhat/console.sol';
 
 /**
  * @title ScaledBalanceTokenBase
@@ -69,7 +70,9 @@ abstract contract ScaledBalanceTokenBase is MintableIncentivizedERC20, IScaledBa
     uint256 amount,
     uint256 index
   ) internal returns (bool) {
+    console.log('_mintScaled amount', amount);
     uint256 amountScaled = amount.rayDiv(index);
+    console.log('_mintScaled amountScaled', amountScaled);
     require(amountScaled != 0, Errors.INVALID_MINT_AMOUNT);
 
     uint256 scaledBalance = super.balanceOf(onBehalfOf);
@@ -97,6 +100,7 @@ abstract contract ScaledBalanceTokenBase is MintableIncentivizedERC20, IScaledBa
    * @param index The variable debt index of the reserve
    */
   function _burnScaled(address user, address target, uint256 amount, uint256 index) internal {
+    console.log('_burnScaled::index', index);
     uint256 amountScaled = amount.rayDiv(index);
     require(amountScaled != 0, Errors.INVALID_BURN_AMOUNT);
 
@@ -107,6 +111,8 @@ abstract contract ScaledBalanceTokenBase is MintableIncentivizedERC20, IScaledBa
     _userState[user].additionalData = index.toUint128();
 
     _burn(user, amountScaled.toUint128());
+    console.log('_burnScaled::amountScaled', scaledBalance);
+    console.log('_burnScaled::balanceIncrease', balanceIncrease);
 
     if (balanceIncrease > amount) {
       uint256 amountToMint = balanceIncrease - amount;

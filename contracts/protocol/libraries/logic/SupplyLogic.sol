@@ -12,6 +12,7 @@ import {PercentageMath} from '../math/PercentageMath.sol';
 import {ValidationLogic} from './ValidationLogic.sol';
 import {ReserveLogic} from './ReserveLogic.sol';
 import {ReserveConfiguration} from '../configuration/ReserveConfiguration.sol';
+import 'hardhat/console.sol';
 
 /**
  * @title SupplyLogic library
@@ -57,6 +58,7 @@ library SupplyLogic {
   ) external {
     DataTypes.ReserveData storage reserve = reservesData[params.asset];
     DataTypes.ReserveCache memory reserveCache = reserve.cache();
+    console.log('### executeSupply::reserve.id', reserve.id);
 
     reserve.updateState(reserveCache);
 
@@ -74,6 +76,7 @@ library SupplyLogic {
     );
 
     if (isFirstSupply) {
+      console.log('### isFirstSupply', isFirstSupply);
       if (
         ValidationLogic.validateAutomaticUseAsCollateral(
           reservesData,
@@ -120,6 +123,7 @@ library SupplyLogic {
     );
 
     uint256 amountToWithdraw = params.amount;
+    console.log('### amountToWithdraw', amountToWithdraw);
 
     if (params.amount == type(uint256).max) {
       amountToWithdraw = userBalance;
@@ -129,6 +133,7 @@ library SupplyLogic {
 
     reserve.updateInterestRates(reserveCache, params.asset, 0, amountToWithdraw);
 
+    console.log('### amountToWithdraw2', amountToWithdraw);
     bool isCollateral = userConfig.isUsingAsCollateral(reserve.id);
 
     if (isCollateral && amountToWithdraw == userBalance) {
@@ -264,6 +269,7 @@ library SupplyLogic {
 
     if (useAsCollateral == userConfig.isUsingAsCollateral(reserve.id)) return;
 
+    console.log('### reserve.id', reserve.id);
     if (useAsCollateral) {
       require(
         ValidationLogic.validateUseAsCollateral(
@@ -278,6 +284,7 @@ library SupplyLogic {
       userConfig.setUsingAsCollateral(reserve.id, true);
       emit ReserveUsedAsCollateralEnabled(asset, msg.sender);
     } else {
+      console.log('### useAsCollateral', useAsCollateral);
       userConfig.setUsingAsCollateral(reserve.id, false);
       ValidationLogic.validateHFAndLtv(
         reservesData,

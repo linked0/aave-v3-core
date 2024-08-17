@@ -18,6 +18,7 @@ import {IPoolAddressesProvider} from '../../interfaces/IPoolAddressesProvider.so
 import {IPool} from '../../interfaces/IPool.sol';
 import {IACLManager} from '../../interfaces/IACLManager.sol';
 import {PoolStorage} from './PoolStorage.sol';
+import 'hardhat/console.sol';
 
 /**
  * @title Pool contract
@@ -600,6 +601,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     address variableDebtAddress,
     address interestRateStrategyAddress
   ) external virtual override onlyPoolConfigurator {
+    console.log('### initReserve');
     if (
       PoolLogic.executeInitReserve(
         _reserves,
