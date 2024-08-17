@@ -13,28 +13,28 @@
 
 echo "[BASH] Setting up testnet environment"
 
-# if [ ! "$COVERAGE" = true ]; then
-#     # remove hardhat and artifacts cache
-#     npm run ci:clean
+if [ ! "$COVERAGE" = true ]; then
+    # remove hardhat and artifacts cache
+    npm run ci:clean
 
-#     # compile @aave/core-v3 contracts
-#     npm run compile
-# else
-#     echo "[BASH] Skipping compilation to keep coverage artifacts"
-# fi
+    # compile @aave/core-v3 contracts
+    npm run compile
+else
+    echo "[BASH] Skipping compilation to keep coverage artifacts"
+fi
 
-# # Copy artifacts into separate directory to allow
-# # the hardhat-deploy library load all artifacts without duplicates 
-# mkdir -p temp-artifacts
-# cp -r artifacts/* temp-artifacts
+# Copy artifacts into separate directory to allow
+# the hardhat-deploy library load all artifacts without duplicates 
+mkdir -p temp-artifacts
+cp -r artifacts/* temp-artifacts
 
-# # Import external @aave/periphery artifacts
-# mkdir -p temp-artifacts/periphery
-# cp -r node_modules/@aave/periphery-v3/artifacts/contracts/* temp-artifacts/periphery
+# Import external @aave/periphery artifacts
+mkdir -p temp-artifacts/periphery
+cp -r node_modules/@aave/periphery-v3/artifacts/contracts/* temp-artifacts/periphery
 
-# # Import external @aave/deploy artifacts
-# mkdir -p temp-artifacts/deploy
-# cp -r node_modules/@aave/deploy-v3/artifacts/contracts/* temp-artifacts/deploy
+# Import external @aave/deploy artifacts
+mkdir -p temp-artifacts/deploy
+cp -r node_modules/@aave/deploy-v3/artifacts/contracts/* temp-artifacts/deploy
 
 # Export MARKET_NAME variable to use Aave market as testnet deployment setup
 export MARKET_NAME="Test"
