@@ -1,0 +1,46 @@
+{
+  "title": "****** Pool: Withdraw Simple ******",
+  "description": "withdraw function.",
+  "stories": [
+    {
+      "description": "Users 3 Deposit 14760.147 DAI, set using as collateral = false, then withdraw 14760.147 dai",
+      "actions": [
+        {
+          "name": "mint",
+          "args": {
+            "reserve": "DAI",
+            "amount": "14760.147",
+            "user": "3"
+          },
+          "expected": "success"
+        },
+        {
+          "name": "approve",
+          "args": {
+            "reserve": "DAI",
+            "user": "3"
+          },
+          "expected": "success"
+        },
+        {
+          "name": "deposit",
+          "args": {
+            "reserve": "DAI",
+            "amount": "14760.147",
+            "user": "3"
+          },
+          "expected": "success"
+        },
+        {
+          "name": "withdraw",
+          "args": {
+            "reserve": "DAI",
+            "amount": "14760.147",
+            "user": "3"
+          },
+          "expected": "success"
+        }
+      ]
+    }
+  ]
+}

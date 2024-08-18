@@ -14,6 +14,7 @@ import {DataTypes} from '../types/DataTypes.sol';
 import {ValidationLogic} from './ValidationLogic.sol';
 import {ReserveLogic} from './ReserveLogic.sol';
 import {IsolationModeLogic} from './IsolationModeLogic.sol';
+import 'hardhat/console.sol';
 
 /**
  * @title BorrowLogic library
@@ -185,7 +186,11 @@ library BorrowLogic {
   ) external returns (uint256) {
     DataTypes.ReserveData storage reserve = reservesData[params.asset];
     DataTypes.ReserveCache memory reserveCache = reserve.cache();
+
+    console.log('executeRepay:nextLiquidityIndex', reserveCache.nextLiquidityIndex);
+
     reserve.updateState(reserveCache);
+    console.log('executeRepay:nextLiquidityIndex2', reserveCache.nextLiquidityIndex);
 
     (uint256 stableDebt, uint256 variableDebt) = Helpers.getUserCurrentDebt(
       params.onBehalfOf,

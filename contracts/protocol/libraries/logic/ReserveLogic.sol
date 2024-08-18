@@ -13,6 +13,7 @@ import {PercentageMath} from '../math/PercentageMath.sol';
 import {Errors} from '../helpers/Errors.sol';
 import {DataTypes} from '../types/DataTypes.sol';
 import {SafeCast} from '../../../dependencies/openzeppelin/contracts/SafeCast.sol';
+import 'hardhat/console.sol';
 
 /**
  * @title ReserveLogic library
@@ -297,6 +298,13 @@ library ReserveLogic {
       reserveCache.nextLiquidityIndex = cumulatedLiquidityInterest.rayMul(
         reserveCache.currLiquidityIndex
       );
+      console.log(
+        '### cumulatedLiquidityInterest',
+        cumulatedLiquidityInterest,
+        'currLiquidityIndex',
+        reserveCache.currLiquidityIndex
+      );
+      console.log('### nextLiquidityIndex', reserveCache.nextLiquidityIndex);
       reserve.liquidityIndex = reserveCache.nextLiquidityIndex.toUint128();
     }
 

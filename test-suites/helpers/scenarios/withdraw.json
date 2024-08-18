@@ -1,5 +1,5 @@
 {
-  "title": "Pool: Withdraw",
+  "title": "****** Pool: Withdraw ******",
   "description": "withdraw function.",
   "stories": [
     {
@@ -30,7 +30,88 @@
             "user": "3"
           },
           "expected": "success"
+        }
+      ]
+    },
+    {
+      "description": "user 1 deposits 1 WETH as collateral and borrows 1476.01 DAI at stable rate",
+      "actions": [
+        {
+          "name": "mint",
+          "args": {
+            "reserve": "WETH",
+            "amount": "1",
+            "user": "1"
+          },
+          "expected": "success"
         },
+        {
+          "name": "approve",
+          "args": {
+            "reserve": "WETH",
+            "user": "1"
+          },
+          "expected": "success"
+        },
+        {
+          "name": "deposit",
+          "args": {
+            "reserve": "WETH",
+            "amount": "1",
+            "user": "1"
+          },
+          "expected": "success"
+        },
+        {
+          "name": "borrow",
+          "args": {
+            "reserve": "DAI",
+            "amount": "1476.01",
+            "borrowRateMode": "stable",
+            "user": "1",
+            "timeTravel": "365"
+          },
+          "expected": "success"
+        }
+      ]
+    },
+    {
+      "description": "User 1 repays the DAI borrow after one year",
+      "actions": [
+        {
+          "name": "mint",
+          "description": "Mint 10 DAI to cover the interest",
+          "args": {
+            "reserve": "DAI",
+            "amount": "147.60",
+            "user": "1"
+          },
+          "expected": "success"
+        },
+        {
+          "name": "approve",
+          "args": {
+            "reserve": "DAI",
+            "user": "1"
+          },
+          "expected": "success"
+        },
+        {
+          "name": "repay",
+          "args": {
+            "reserve": "DAI",
+            "amount": "1476.01",
+            "user": "1",
+            "onBehalfOf": "1",
+            "borrowRateMode": "stable"
+          },
+          "expected": "success"
+        }
+      ]
+    },
+    {
+      "description": "user 3 withdraw 14760.147 dai",
+      "actions": [
         {
           "name": "withdraw",
           "args": {

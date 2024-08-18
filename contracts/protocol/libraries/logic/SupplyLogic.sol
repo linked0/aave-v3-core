@@ -75,6 +75,8 @@ library SupplyLogic {
       reserveCache.nextLiquidityIndex
     );
 
+    console.log('executeSupply:nextLiquidityIndex', reserveCache.nextLiquidityIndex);
+
     if (isFirstSupply) {
       console.log('### isFirstSupply', isFirstSupply);
       if (
@@ -117,10 +119,13 @@ library SupplyLogic {
     DataTypes.ReserveCache memory reserveCache = reserve.cache();
 
     reserve.updateState(reserveCache);
+    console.log('executeWithdraw:reserveCache.nextLiquidityIndex', reserveCache.nextLiquidityIndex);
 
     uint256 userBalance = IAToken(reserveCache.aTokenAddress).scaledBalanceOf(msg.sender).rayMul(
       reserveCache.nextLiquidityIndex
     );
+
+    console.log('### userBalance', userBalance);
 
     uint256 amountToWithdraw = params.amount;
     console.log('### amountToWithdraw', amountToWithdraw);
@@ -133,7 +138,6 @@ library SupplyLogic {
 
     reserve.updateInterestRates(reserveCache, params.asset, 0, amountToWithdraw);
 
-    console.log('### amountToWithdraw2', amountToWithdraw);
     bool isCollateral = userConfig.isUsingAsCollateral(reserve.id);
 
     if (isCollateral && amountToWithdraw == userBalance) {

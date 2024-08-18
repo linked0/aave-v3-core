@@ -15,7 +15,7 @@ echo "[BASH] Setting up testnet environment"
 
 if [ ! "$COVERAGE" = true ]; then
     # remove hardhat and artifacts cache
-    npm run ci:clean
+    # npm run ci:clean
 
     # compile @aave/core-v3 contracts
     npm run compile

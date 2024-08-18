@@ -15,6 +15,17 @@ import {
 } from './actions';
 import { RateMode } from '../../helpers/types';
 import { getTestWallets } from './utils/wallets';
+import {
+  getAToken,
+  getMintableERC20,
+  getStableDebtToken,
+  getVariableDebtToken,
+  getTestnetReserveAddressFromSymbol,
+} from '@aave/deploy-v3/dist/helpers/contract-getters';
+import { getReserveData, getUserData } from './utils/helpers';
+import { convertToCurrencyDecimals } from '../../helpers/contracts-helpers';
+import { getChainId } from 'hardhat';
+import { MintableERC20__factory } from '../../types';
 
 export interface Action {
   name: string;
@@ -38,7 +49,43 @@ export const executeStory = async (story: Story, testEnv: TestEnv) => {
   for (const action of story.actions) {
     const { users } = testEnv;
     await executeAction(action, users, testEnv);
+    await getInfo(action, users, testEnv);
   }
+};
+
+const getInfo = async (action: Action, users: SignerWithAddress[], testEnv: TestEnv) => {
+  console.log(`====== ${action.name}`);
+  const { reserve, user: userIndex, borrowRateMode } = action.args;
+  const { amount, sendValue, onBehalfOf: onBehalfOfIndex } = action.args;
+
+  const { pool, helpersContract } = testEnv;
+  const user = users[parseInt(userIndex)];
+
+  const onBehalfOf = onBehalfOfIndex ? users[parseInt(onBehalfOfIndex)].address : user.address;
+
+  const reserveAddr = await getTestnetReserveAddressFromSymbol(reserve);
+  if (amount !== undefined) {
+    const amountToDeposit = await convertToCurrencyDecimals(reserveAddr, amount);
+    console.log(`amountToDeposit: ${amountToDeposit}`);
+  }
+
+  const chainId = Number(await getChainId());
+  const data = await getReserveData(helpersContract, reserveAddr);
+  if (reserve != 'WETH') {
+    const token = new MintableERC20__factory(user.signer).attach(reserveAddr);
+    const highDeadline = '100000000000000000000000000';
+    const nonce = await token.nonces(user.address);
+
+    console.log(`token: ${token.address}`);
+
+    console.log(`Balance of token of user: ${await token.balanceOf(user.address)}`);
+    console.log(`Balance of Atoken: ${await token.balanceOf(data.aTokenAddress)}`);
+
+    const aToken = await getAToken(data.aTokenAddress);
+    console.log(`Balance of aToken of user: ${await aToken.balanceOf(user.address)}`);
+  }
+
+  // console.log(`User data: ${JSON.stringify(data)}`);
 };
 
 const executeAction = async (action: Action, users: SignerWithAddress[], testEnv: TestEnv) => {
